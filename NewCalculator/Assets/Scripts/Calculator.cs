@@ -16,11 +16,12 @@ public class Calculator : MonoBehaviour {
     bool isOperationPerformed = false;
     double[] number = new double[3];
     int p;
+    double w;
 
 
     public void buttonPressed()
     {
-
+       
         if ((inputField.text == " 0"))
             inputField.text = "";
       
@@ -46,6 +47,22 @@ public class Calculator : MonoBehaviour {
         {
             inputField.text = " 0"; 
         }
+        if (buttonValue == "-/+")
+        {
+            Debug.Log("-/+ if entered");
+            if (!inputField.text.Contains("-"))
+            {
+                Debug.Log("set to minus");
+                inputField.text = "-" + inputField.text;
+                
+            } else
+            {
+                w = double.Parse(inputField.text);
+                Debug.Log("set to plus");
+                w = w * -1;
+                inputField.text = w.ToString();
+            }
+        }
         if (buttonValue == "1" || buttonValue == "2" || buttonValue == "3" || buttonValue == "4" || buttonValue == "5" || buttonValue == "6" || buttonValue == "7" || buttonValue == "8" || buttonValue == "9" || buttonValue == "0" && inputField.text != "")
         {
             if (!(isOperationPerformed == true))
@@ -58,6 +75,7 @@ public class Calculator : MonoBehaviour {
                 inputField.text += buttonValue;
                 isOperationPerformed = false;
             }
+            w = double.Parse(inputField.text);
         }
 
         if (buttonValue == "+" || buttonValue == "-" || buttonValue == "*" || buttonValue == "/" || buttonValue == "=") {
