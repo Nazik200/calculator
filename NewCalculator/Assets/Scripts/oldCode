@@ -1,0 +1,551 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
+public class Calculator : MonoBehaviour {
+    [SerializeField]
+    Text inputField;
+    string inputString;
+    int[] number = new int[2];
+    string operatorSymbol;
+    int i = 0;
+    bool displayedResult = false;
+    int result;
+    public void buttonPressed()
+    {
+        if (displayedResult == true)
+        {
+            inputField.text = "";
+            inputString = "";
+            displayedResult = false;
+        }
+        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+        string buttonValue = EventSystem.current.currentSelectedGameObject.name;
+        int arg;
+        string test = "";
+        inputString = inputString + buttonValue;
+        if (!(buttonValue == "+" || buttonValue == "-" || buttonValue == "="))
+        {
+            test = test + buttonValue;
+        }
+  
+        if (int.TryParse(test, out arg))
+        {
+            if (i > 1) i = 0;
+            number[i] = arg;
+            i++;
+        }
+        else
+        {
+            switch (buttonValue)
+            {
+                case "+":
+                    operatorSymbol = buttonValue;
+                    break;
+                case "-":
+                    operatorSymbol = buttonValue;
+                    break;
+                case "=":
+                    switch (operatorSymbol)
+                    {
+                        case "+":
+                            result = number[0] + number[1];
+                            break;
+                        case "-":
+                            result = number[0] - number[1];
+                            break;
+                    }
+                    displayedResult = true;
+                    inputString = result.ToString(); 
+                    number = new int[2];
+                    break;
+            }
+        }
+        
+       
+        inputField.text = inputString;
+    } 
+}
+
+
+~working old code
+
+using System.Collections;
+using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
+public class Calculator : MonoBehaviour {
+    [SerializeField]
+    Text inputField;
+    string inputString;
+    string gNumber = "";
+    int[] number = new int[3];
+    int i = 0;
+    int result;
+    int answer;
+    string operatorSign;
+    bool reset = false;
+    bool clear = false;
+    bool saved = false;
+    public void buttonPressed()
+    {
+        if (reset == true)
+        {
+            if(clear == true)
+            {
+
+                inputString = "";
+                inputField.text = "";
+                clear = false;
+            }
+            answer = result;
+            result = 0;
+            i = 0;
+            number[0] = 0;
+            number[1] = 0;
+            reset = false;
+        }
+        if (saved == true)
+        {
+
+        }
+        inputField.text = "";
+        string buttonValue;
+        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+            buttonValue = EventSystem.current.currentSelectedGameObject.name;
+        if (buttonValue == "1" || buttonValue == "2" || buttonValue == "3" || buttonValue == "4" || buttonValue == "5" || buttonValue == "6" || buttonValue == "7" || buttonValue == "8" || buttonValue == "9" || buttonValue == "0" )
+        {
+            gNumber += buttonValue;
+            Debug.Log("gNumber =" + gNumber);
+            Debug.Log(number[0] + " " + number[1]);
+        }
+        else if (buttonValue == "-" || buttonValue == "=" || buttonValue == "+")
+        {
+            if (int.TryParse(gNumber, out number[i]))
+            {
+                number[i] = int.Parse(gNumber);
+            }
+            
+            gNumber = "";
+            Debug.Log(number[0] + " " + number[1]);
+            
+            switch (buttonValue)
+            {
+                case "save":
+                    if (answer != 0)
+                    {
+                        inputString = "";
+                        number[2] = answer;
+                        answer = 0;
+                        number[1] = 0;
+                        number[0] = 0;
+                        clear = true;
+                        saved = true;
+                    }
+                    break;
+                case "-":
+                    operatorSign = buttonValue;
+                    if (i == 1)
+                    {
+                        answer =  number[0] - number[1];
+                        number[0] = 0;
+                        number[1] = 0;
+                        i = 0;
+                        Debug.Log(number[0] + " " + number[1]);
+                        
+                    }
+                    break;
+
+                case "+":
+                    operatorSign = buttonValue;
+                    if (i == 1)
+                    {
+                        answer += number[0] + number[1];
+                        number[0] = 0;
+                        number[1] = 0;
+                        i = 0;
+                        Debug.Log(number[0] + " " + number[1]);
+                                            }
+                    break;
+
+                case "=":
+                    switch (operatorSign)
+                    {
+                        case "-":
+                          result =  number[0] - number[1] - answer - number[2] ;
+                            Debug.Log("Result of - " + result);
+                            break;
+                        case "+":
+                            result = number[0] + number[1] + answer + number[2];
+                            Debug.Log("Result of + " + result);
+                            break;
+                    }
+                    reset = true;
+                    break;
+
+            }
+            i++;
+        }
+        if (buttonValue != "=")
+        {
+            inputString += buttonValue;
+        }
+        else if (buttonValue == "=")
+        {
+            clear = true;
+            inputString = result.ToString();
+        }
+        inputField.text = inputString;
+
+       
+       // inputField.text = inputString;
+    }
+}
+
+
+//////////////////////////////////////////////////////
+using System.Collections;
+using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
+public class Calculator : MonoBehaviour {
+    [SerializeField]
+    Text inputField;
+    string operatorSign;
+
+    string buttonValue;
+    double result = 0;
+    int i;
+    bool isOperationPerformed = false;
+    double[] number = new double[3];
+    int p;
+
+
+    public void buttonPressed()
+    {
+
+        if ((inputField.text == " 0"))
+            inputField.text = "";
+        if (isOperationPerformed == true)
+        {
+            i = 0;
+            isOperationPerformed = false;
+        }
+        // Which button has been pressed is requied
+        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+        buttonValue = EventSystem.current.currentSelectedGameObject.name;
+// End Which button
+
+// Answer Code
+        if (buttonValue == "=") {
+            number = new double[3];
+            number[2] = double.Parse(inputField.text);
+            isOperationPerformed = true;
+        }
+// End Asnwer code
+
+// When pressed . Code is finished
+        if (buttonValue == ".")
+        {
+            if (inputField.text == "")
+            {
+                inputField.text += "0" + buttonValue;
+            }
+
+            if (!inputField.text.Contains("."))
+                inputField.text = inputField.text + buttonValue;
+        }
+ // end When pressed . Code is finished
+
+
+        if (buttonValue == "1" || buttonValue == "2" || buttonValue == "3" || buttonValue == "4" || buttonValue == "5" || buttonValue == "6" || buttonValue == "7" || buttonValue == "8" || buttonValue == "9" || buttonValue == "0" && inputField.text != "")
+        {
+            inputField.text += buttonValue;
+
+           
+             
+            
+
+        }
+
+        if (buttonValue == "+" || buttonValue == "-" || buttonValue == "*" || buttonValue == "/") {
+
+            /////////////////////////////////////////////////////
+            if (p == 1)
+                {
+                    i++;
+                    p = 0;
+                    Debug.Log("p equals = " + p);
+                }
+                else if (p == 0)
+                {
+                    i = 0;
+                    Debug.Log("i has been set to: " + i);
+                }
+            ///////////////////////////////////////////////////////
+            number[i] = double.Parse(inputField.text);
+            Debug.Log("Number " + number[i] + " is saved under " + i);
+            operatorSign = buttonValue;
+            inputField.text = "";
+            if (i == 1)
+            {
+                switch (operatorSign)
+                {
+                    case "+":
+                        result = number[0] + number[1];
+                        inputField.text = result.ToString();
+                        break;
+                    case "-":
+
+                        result = number[0] - number[1];
+                        inputField.text = result.ToString();
+                        break;
+                    case "/":
+
+                        result = number[0] / number[1];
+                        inputField.text = result.ToString();
+                        break;
+                    case "*":
+
+                        result = number[0] * number[1];
+                        inputField.text = result.ToString();
+                        break;
+                }
+            }
+            if( i == 0)
+            p = 1;
+        }
+
+            
+    }
+        
+   
+
+    }
+////////////////////////////////////////////////////////////////////////
+using System.Collections;
+using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
+public class Calculator : MonoBehaviour {
+    [SerializeField]
+    Text inputField;
+    string operatorSign;
+
+    string buttonValue;
+    double result = 0;
+    int i;
+    bool isOperationPerformed = false;
+    double[] number = new double[3];
+    int p;
+
+
+    public void buttonPressed()
+    {
+
+        if ((inputField.text == " 0"))
+            inputField.text = "";
+      
+        // Which button has been pressed is requied
+        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+        buttonValue = EventSystem.current.currentSelectedGameObject.name;
+// End Which button
+
+// When pressed . Code is finished
+        if (buttonValue == ".")
+        {
+            if (inputField.text == "")
+            {
+                inputField.text += "0" + buttonValue;
+            }
+
+            if (!inputField.text.Contains("."))
+                inputField.text = inputField.text + buttonValue;
+        }
+ // end When pressed . Code is finished
+
+
+        if (buttonValue == "1" || buttonValue == "2" || buttonValue == "3" || buttonValue == "4" || buttonValue == "5" || buttonValue == "6" || buttonValue == "7" || buttonValue == "8" || buttonValue == "9" || buttonValue == "0" && inputField.text != "")
+        {
+            inputField.text += buttonValue; }
+
+        if (buttonValue == "+" || buttonValue == "-" || buttonValue == "*" || buttonValue == "/" || buttonValue == "=") {
+
+            number[i] = double.Parse(inputField.text);
+            Debug.Log(number[i] + " has been saed under " + i);
+            i++;
+            Debug.Log("i = " + i);
+            if (!(buttonValue == "=")){
+                operatorSign = buttonValue;
+                Debug.Log("operatpr = " + operatorSign);
+                inputField.text = "";
+            } else if(buttonValue == "=")
+            {
+                if (i == 2)
+                {
+                    Debug.Log("i in if condition = " + i);
+                    Debug.Log(number[0]);
+                    Debug.Log(number[1]);
+                    switch (operatorSign)
+                    {
+                        case "+":
+                            result = number[0] + number[1];
+                            inputField.text = result.ToString();
+                            break;
+                        case "*":
+                            result = number[0] * number[1];
+                            inputField.text = result.ToString();
+                            break;
+                        case "-":
+                            result = number[0] - number[1];
+                            inputField.text = result.ToString();
+                            break;
+                        case "/":
+                            result = number[0] / number[1];
+                            inputField.text = result.ToString();
+                            break;
+                    }
+                    i = 0;
+                    Debug.Log("i = " + i);
+                }
+
+            }
+
+        }
+
+            
+    }
+        
+   
+
+    }
+
+///////////////// The latest working version/////////////////////////
+using System.Collections;
+using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
+public class Calculator : MonoBehaviour {
+    [SerializeField]
+    Text inputField;
+    string operatorSign;
+
+    string buttonValue;
+    double result = 0;
+    int i;
+    bool isOperationPerformed = false;
+    double[] number = new double[3];
+    int p;
+
+
+    public void buttonPressed()
+    {
+
+        if ((inputField.text == " 0"))
+            inputField.text = "";
+      
+        // Which button has been pressed is requied
+        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+        buttonValue = EventSystem.current.currentSelectedGameObject.name;
+// End Which button
+
+// When pressed . Code is finished
+        if (buttonValue == ".")
+        {
+            if (inputField.text == "")
+            {
+                inputField.text += "0" + buttonValue;
+            }
+
+            if (!inputField.text.Contains("."))
+                inputField.text = inputField.text + buttonValue;
+        }
+        // end When pressed . Code is finished
+
+        if (buttonValue == "c")
+        {
+            inputField.text = " 0"; 
+        }
+        if (buttonValue == "1" || buttonValue == "2" || buttonValue == "3" || buttonValue == "4" || buttonValue == "5" || buttonValue == "6" || buttonValue == "7" || buttonValue == "8" || buttonValue == "9" || buttonValue == "0" && inputField.text != "")
+        {
+            if (!(isOperationPerformed == true))
+            {
+                inputField.text += buttonValue;
+            }
+            else
+            {
+                inputField.text = "";
+                inputField.text += buttonValue;
+                isOperationPerformed = false;
+            }
+        }
+
+        if (buttonValue == "+" || buttonValue == "-" || buttonValue == "*" || buttonValue == "/" || buttonValue == "=") {
+
+            number[i] = double.Parse(inputField.text);
+            Debug.Log(number[i] + " has been saed under " + i);
+            i++;
+            Debug.Log("i = " + i);
+            if (!(buttonValue == "=")){
+                operatorSign = buttonValue;
+                Debug.Log("operatpr = " + operatorSign);
+                inputField.text = "";
+            } else if(buttonValue == "=")
+            {
+                if (i == 2)
+                {
+                    Debug.Log("i in if condition = " + i);
+                    Debug.Log(number[0]);
+                    Debug.Log(number[1]);
+                    switch (operatorSign)
+                    {
+                        case "+":
+                            result = number[0] + number[1];
+                            inputField.text = result.ToString();
+                            isOperationPerformed = true;
+                            break;
+                        case "*":
+                            result = number[0] * number[1];
+                            inputField.text = result.ToString();
+                            isOperationPerformed = true;
+                            break;
+                        case "-":
+                            result = number[0] - number[1];
+                            inputField.text = result.ToString();
+                            isOperationPerformed = true;
+                            break;
+                        case "/":
+                            result = number[0] / number[1];
+                            inputField.text = result.ToString();
+                            isOperationPerformed = true;
+                            break;
+                    }
+                    i = 0;
+                    Debug.Log("i = " + i);
+                }
+
+            }
+
+        }
+
+            
+    }
+        
+   
+
+    }
+
